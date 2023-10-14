@@ -16,4 +16,9 @@ export class CiudadController {
   async getAllOrm(): Promise<Ciudad[]>{
     return await this.ciudadService.findAllOrm();
   }
+  @Get(':id')
+  async getId(@Param('id') id:number): Promise<Ciudad>{
+    return await this.ciudadService.findById(id);
+  }
+
 }
