@@ -1,8 +1,7 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Put, Body, Patch, Param, Delete } from '@nestjs/common';
 import { CiudadService } from './ciudad.service';
 import { Ciudad } from './entities/ciudad.entity';
 import { CreateCiudadDto } from './dto/create-ciudad.dto';
-//import { CreateCiudadDto } from './dto/create-ciudad.dto';
 //import { UpdateCiudadDto } from './dto/update-ciudad.dto';
 
 @Controller('ciudad')
@@ -21,5 +20,12 @@ export class CiudadController {
   async getId(@Param('id') id:number): Promise<CreateCiudadDto>{
     return await this.ciudadService.findById(id);
   }
-
+  @Post('crear')
+  async crearCiudad(@Body() ciudad:CreateCiudadDto) : Promise<boolean>{
+    return this.ciudadService.crearCiudad(ciudad);
+  }
+  @Put('actualizar/:id')
+  async actualizarCiudadId(@Body() createCiudadDto, @Param('id') id:number) : Promise<String>{
+    return this.ciudadService.actualizarCiudadId(createCiudadDto, id);
+  }
 }

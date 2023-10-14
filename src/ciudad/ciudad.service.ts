@@ -1,5 +1,4 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-//import { CreateCiudadDto } from './dto/create-ciudad.dto';
 //import { UpdateCiudadDto } from './dto/update-ciudad.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Ciudad } from './entities/ciudad.entity';
@@ -28,19 +27,48 @@ export class CiudadService {
     return await this.ciudadRepository.find();
   }
 
-  async findById(id: number): Promise<CreateCiudadDto>{
-    try{
-    const criterio : FindOneOptions = { where: { id: id } };
-    let ciudad : Ciudad = await this.ciudadRepository.findOne(criterio);
-    if(ciudad)
-      return ciudad;
-    else
-      throw new Error("no se encuentra la ciudad");
-    }
-    catch(error){
-      throw new HttpException({
-        status: HttpStatus.CONFLICT,
-        error : " Error en Ciudad " + error},HttpStatus.NOT_FOUND)
-      };
+  async findById(id: number): Promise<CreateCiudadDto> {
+    try {
+      const criterio: FindOneOptions = { where: { id: id } };
+      let ciudad: Ciudad = await this.ciudadRepository.findOne(criterio);
+      if (ciudad) return ciudad;
+      else throw new Error('no se encuentra la ciudad');
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.CONFLICT,
+          error: ' Error en Ciudad ' + error,
+        },
+        HttpStatus.NOT_FOUND,
+      );
     }
   }
+  async crearCiudad(createCiudadDto: CreateCiudadDto): Promise<boolean> {
+    try {
+      let ciudad: Ciudad = await this.ciudadRepository.save(
+        new Ciudad(createCiudadDto.nombre),
+      );
+      if (ciudad) return true;
+      else throw new Error(' no se pudo crear la ciudad');
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          error: ' error en la ciudad ' + error,
+        },
+        HttpStatus.NOT_FOUND,
+      );
+    }
+  }
+  async actualizarCiudadId(createCiudadDto : CreateCiudadDto , id : number) : Promise <String>{
+    const criterio : FindOneOptions = {where : {id: id}};
+    let ciudad : Ciudad = await this.ciudadRepository.findOne(criterio);
+    let ciudadVieja = ciudad.getNombre();
+    if (!ciudad)
+      throw new Error('no se pudo encontrar la ciudad a modificar');
+    else 
+      ciudad.setNombre(createCiudadDto.nombre);
+      ciudad = await this.ciudadRepository.save(ciudad);
+      return 'Ok  se cambio: ' + ciudadVieja + ' por: ' + createCiudadDto.nombre ;
+  }
+}
