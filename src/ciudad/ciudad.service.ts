@@ -60,15 +60,41 @@ export class CiudadService {
       );
     }
   }
-  async actualizarCiudadId(createCiudadDto : CreateCiudadDto , id : number) : Promise <String>{
-    const criterio : FindOneOptions = {where : {id: id}};
-    let ciudad : Ciudad = await this.ciudadRepository.findOne(criterio);
-    let ciudadVieja = ciudad.getNombre();
-    if (!ciudad)
-      throw new Error('no se pudo encontrar la ciudad a modificar');
-    else 
+  async actualizarCiudadId(
+    createCiudadDto: CreateCiudadDto,id: number,): Promise<String> {
+    const criterio: FindOneOptions = { where: { id: id } };
+    let ciudad: Ciudad = await this.ciudadRepository.findOne(criterio);
+    if (!ciudad) throw new Error('no se pudo encontrar la ciudad a modificar');
+    else {
+      let ciudadVieja = ciudad.getNombre();
       ciudad.setNombre(createCiudadDto.nombre);
       ciudad = await this.ciudadRepository.save(ciudad);
-      return 'Ok  se cambio: ' + ciudadVieja + ' por: ' + createCiudadDto.nombre ;
+      return (
+        'Ok  se cambio: ' + ciudadVieja + ' por: ' + createCiudadDto.nombre
+      );
+    }
   }
-}
+
+  async eliminarCiudadPorId(id:number): Promise<any> {
+    try {
+    let criterio : FindOneOptions  = {where : {id: id}};
+    let ciudad : Ciudad = await this.ciudadRepository.findOne(criterio);
+    if(!ciudad)
+      throw new Error('no se pudo eliminar la Ciudad')
+    else 
+    await this.ciudadRepository.remove(ciudad);
+      return {
+    id: id,
+    message : 'se elimino la ciudad'
+      }
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          error: ' error en la ciudad ' + error,
+        },
+        HttpStatus.NOT_FOUND,
+      );
+    }
+  }
+  }

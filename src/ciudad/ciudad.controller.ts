@@ -28,4 +28,8 @@ export class CiudadController {
   async actualizarCiudadId(@Body() createCiudadDto, @Param('id') id:number) : Promise<String>{
     return this.ciudadService.actualizarCiudadId(createCiudadDto, id);
   }
+  @Delete('eliminar/:id')
+  async eliminarCiudadPorId(@Param('id') id:number): Promise<CreateCiudadDto>{
+    return await this.ciudadService.eliminarCiudadPorId(id);
+  }
 }
