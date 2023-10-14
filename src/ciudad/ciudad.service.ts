@@ -4,6 +4,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Ciudad } from './entities/ciudad.entity';
 import { FindOneOptions, Repository } from 'typeorm';
+import { CreateCiudadDto } from './dto/create-ciudad.dto';
 
 @Injectable()
 export class CiudadService {
@@ -14,7 +15,7 @@ export class CiudadService {
     private readonly ciudadRepository: Repository<Ciudad>,
   ) {}
 
-  async findAllRaw(): Promise<Ciudad[]> {
+  async findAllRaw(): Promise<CreateCiudadDto[]> {
     this.ciudades = [];
     let datos = await this.ciudadRepository.query('select * from ciudad');
     datos.forEach((element) => {
@@ -23,11 +24,11 @@ export class CiudadService {
     });
     return this.ciudades;
   }
-  async findAllOrm(): Promise<Ciudad[]> {
+  async findAllOrm(): Promise<CreateCiudadDto[]> {
     return await this.ciudadRepository.find();
   }
 
-  async findById(id: number): Promise<Ciudad>{
+  async findById(id: number): Promise<CreateCiudadDto>{
     try{
     const criterio : FindOneOptions = { where: { id: id } };
     let ciudad : Ciudad = await this.ciudadRepository.findOne(criterio);

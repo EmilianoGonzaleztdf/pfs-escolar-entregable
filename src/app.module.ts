@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CiudadModule } from './ciudad/ciudad.module';
 import { ClaseModule } from './clase/clase.module';
+import { ProfesorModule } from './profesor/profesor.module';
 
 
 @Module({
@@ -17,7 +18,7 @@ import { ClaseModule } from './clase/clase.module';
     "entities": [__dirname + "/**/**/**.entity{.ts,.js}"],
     "synchronize": true //modo desarrollador.
 
-  }), CiudadModule, ClaseModule,],
+  }), CiudadModule, ClaseModule, ProfesorModule,],
   controllers: [AppController],
   providers: [AppService],
 })
