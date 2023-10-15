@@ -1,9 +1,9 @@
 import { IsNotEmpty } from "class-validator";
 import { Column, Entity, PrimaryGeneratedColumn,  } from "typeorm";
 
-//atributos
-@Entity({name : "profesor"})
-export class Profesor {
+@Entity({name : "escuela"})
+export class Escuela {
+  //atributos
   @PrimaryGeneratedColumn()
   id : number;
 
@@ -13,12 +13,14 @@ export class Profesor {
 
   @Column()
   @IsNotEmpty()
-  apellido : string;
-  //constructor
-  constructor(nombre: string,apellido: string ){
+  domicilio : string;
+
+  // controlador
+  constructor(nombre: string, domicilio: string) {
     this.nombre = nombre;
-    this.apellido =apellido;
+    this.domicilio = domicilio;
   }
+
   //metodos get&set
   public getId(){
     return this.id;
@@ -29,10 +31,10 @@ export class Profesor {
   public setNombre(nombre: string){
     this.nombre = nombre;
   }
-  public getapellido(){
-    return this.apellido;
+  public getDomicilio(){
+    return this.domicilio;
   }
-  public setApellido(apellido: string){
-    this.apellido =apellido;
+  public setDomicilio(domicilio: string){
+    this.domicilio = domicilio;
   }
 }
