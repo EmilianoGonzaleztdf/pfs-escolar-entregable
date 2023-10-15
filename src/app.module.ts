@@ -6,6 +6,8 @@ import { CiudadModule } from './ciudad/ciudad.module';
 import { ClaseModule } from './clase/clase.module';
 import { ProfesorModule } from './profesor/profesor.module';
 import { EscuelaModule } from './escuela/escuela.module';
+import { EstudianteModule } from './estudiante/estudiante.module';
+import { AsistenciaModule } from './asistencia/asistencia.module';
 
 
 @Module({
@@ -19,7 +21,7 @@ import { EscuelaModule } from './escuela/escuela.module';
     "entities": [__dirname + "/**/**/**.entity{.ts,.js}"],
     "synchronize": true //modo desarrollador.
 
-  }), CiudadModule, ClaseModule, ProfesorModule, EscuelaModule,],
+  }), CiudadModule, ClaseModule, ProfesorModule, EscuelaModule, EstudianteModule, AsistenciaModule,],
   controllers: [AppController],
   providers: [AppService],
 })
