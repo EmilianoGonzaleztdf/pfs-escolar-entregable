@@ -28,11 +28,11 @@ export class Escuela {
   public getNombre(){
     return this.nombre;
   }
-  public setNombre(nombre: string){
-    this.nombre = nombre;
-  }
   public getDomicilio(){
     return this.domicilio;
+  }
+  public setNombre(nombre: string){
+    this.nombre = nombre;
   }
   public setDomicilio(domicilio: string){
     this.domicilio = domicilio;

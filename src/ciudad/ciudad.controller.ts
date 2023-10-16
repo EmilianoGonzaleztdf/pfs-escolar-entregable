@@ -2,7 +2,6 @@ import { Controller, Get, Post, Put, Body, Patch, Param, Delete } from '@nestjs/
 import { CiudadService } from './ciudad.service';
 import { Ciudad } from './entities/ciudad.entity';
 import { CreateCiudadDto } from './dto/create-ciudad.dto';
-//import { UpdateCiudadDto } from './dto/update-ciudad.dto';
 
 @Controller('ciudad')
 export class CiudadController {

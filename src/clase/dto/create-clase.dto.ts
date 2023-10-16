@@ -1,1 +1,3 @@
-export class CreateClaseDto {}
+export class CreateClaseDto {
+  readonly nombre: string;
+}

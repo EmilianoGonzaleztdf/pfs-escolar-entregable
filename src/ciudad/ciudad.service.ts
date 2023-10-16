@@ -1,5 +1,4 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-//import { UpdateCiudadDto } from './dto/update-ciudad.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Ciudad } from './entities/ciudad.entity';
 import { FindOneOptions, Repository } from 'typeorm';
@@ -16,15 +15,37 @@ export class CiudadService {
 
   async findAllRaw(): Promise<CreateCiudadDto[]> {
     this.ciudades = [];
-    let datos = await this.ciudadRepository.query('select * from ciudad');
-    datos.forEach((element) => {
-      let ciudad: Ciudad = new Ciudad(element['nombre']);
-      this.ciudades.push(ciudad);
-    });
-    return this.ciudades;
+    try {
+      let datos = await this.ciudadRepository.query('select * from ciudad');
+      datos.forEach((element) => {
+        let ciudad: Ciudad = new Ciudad(element['nombre']);
+        this.ciudades.push(ciudad);
+      });
+      if (this.ciudades) return this.ciudades;
+      else throw new Error('no se pueden mostrar las ciudades');
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.CONFLICT,
+          error: ' no se pueden obtener las ciudades' + error,
+        },
+        HttpStatus.NOT_FOUND,
+      );
+    }
   }
+
   async findAllOrm(): Promise<CreateCiudadDto[]> {
-    return await this.ciudadRepository.find();
+    try {
+      return await this.ciudadRepository.find();
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.CONFLICT,
+          error: ' no se puede obtener las ciudades ' + error,
+        },
+        HttpStatus.NOT_FOUND,
+      );
+    }
   }
 
   async findById(id: number): Promise<CreateCiudadDto> {
@@ -60,33 +81,41 @@ export class CiudadService {
       );
     }
   }
-  async actualizarCiudadId(
-    createCiudadDto: CreateCiudadDto,id: number,): Promise<String> {
-    const criterio: FindOneOptions = { where: { id: id } };
-    let ciudad: Ciudad = await this.ciudadRepository.findOne(criterio);
-    if (!ciudad) throw new Error('no se pudo encontrar la ciudad a modificar');
-    else {
-      let ciudadVieja = ciudad.getNombre();
-      ciudad.setNombre(createCiudadDto.nombre);
-      ciudad = await this.ciudadRepository.save(ciudad);
-      return (
-        'Ok  se cambio: ' + ciudadVieja + ' por: ' + createCiudadDto.nombre
+  async actualizarCiudadId(createCiudadDto: CreateCiudadDto,id: number,): Promise<String> {
+    try {
+      const criterio: FindOneOptions = { where: { id: id } };
+      let ciudad: Ciudad = await this.ciudadRepository.findOne(criterio);
+      if (!ciudad)
+        throw new Error('no se pudo encontrar la ciudad a modificar');
+      else {
+        let ciudadVieja = ciudad.getNombre();
+        ciudad.setNombre(createCiudadDto.nombre);
+        ciudad = await this.ciudadRepository.save(ciudad);
+        return (
+          'Ok  se cambio: ' + ciudadVieja + ' por: ' + createCiudadDto.nombre
+        );
+      }
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.CONFLICT,
+          error: ' no se puede actualizar la ciudad ' + error,
+        },
+        HttpStatus.NOT_FOUND,
       );
     }
   }
 
-  async eliminarCiudadPorId(id:number): Promise<any> {
+  async eliminarCiudadPorId(id: number): Promise<any> {
     try {
-    let criterio : FindOneOptions  = {where : {id: id}};
-    let ciudad : Ciudad = await this.ciudadRepository.findOne(criterio);
-    if(!ciudad)
-      throw new Error('no se pudo eliminar la Ciudad')
-    else 
-    await this.ciudadRepository.remove(ciudad);
+      let criterio: FindOneOptions = { where: { id: id } };
+      let ciudad: Ciudad = await this.ciudadRepository.findOne(criterio);
+      if (!ciudad) throw new Error('no se pudo eliminar la Ciudad');
+      else await this.ciudadRepository.remove(ciudad);
       return {
-    id: id,
-    message : 'se elimino la ciudad'
-      }
+        id: id,
+        message: 'se elimino la ciudad',
+      };
     } catch (error) {
       throw new HttpException(
         {
@@ -97,4 +126,4 @@ export class CiudadService {
       );
     }
   }
-  }
+}

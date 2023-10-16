@@ -1,7 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { AsistenciaService } from './asistencia.service';
 import { CreateAsistenciaDto } from './dto/create-asistencia.dto';
-import { UpdateAsistenciaDto } from './dto/update-asistencia.dto';
 
 @Controller('asistencia')
 export class AsistenciaController {
@@ -23,8 +22,8 @@ export class AsistenciaController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAsistenciaDto: UpdateAsistenciaDto) {
-    return this.asistenciaService.update(+id, updateAsistenciaDto);
+  update(@Param('id') id: string, @Body() createAsistenciaDto: CreateAsistenciaDto) {
+    return this.asistenciaService.update(+id, createAsistenciaDto);
   }
 
   @Delete(':id')

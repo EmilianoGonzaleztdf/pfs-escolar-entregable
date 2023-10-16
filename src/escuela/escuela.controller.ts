@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { EscuelaService } from './escuela.service';
 import { CreateEscuelaDto } from './dto/create-escuela.dto';
-import { UpdateEscuelaDto } from './dto/update-escuela.dto';
+import { Escuela } from './entities/escuela.entity';
 
 @Controller('escuela')
 export class EscuelaController {
@@ -13,22 +13,22 @@ export class EscuelaController {
   }
 
   @Get()
-  findAll() {
+  findAll() : Promise<CreateEscuelaDto[]> {
     return this.escuelaService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.escuelaService.findOne(+id);
+  findOne(@Param('id') id: number) : Promise<CreateEscuelaDto> {
+    return this.escuelaService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateEscuelaDto: UpdateEscuelaDto) {
-    return this.escuelaService.update(+id, updateEscuelaDto);
+  update(@Param('id') id: number, @Body() createCiudadDto): Promise<String> {
+    return this.escuelaService.update(id, createCiudadDto); 
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.escuelaService.remove(+id);
+  remove(@Param('id') id: number) : Promise<any> {
+    return this.escuelaService.remove(id);
   }
 }
