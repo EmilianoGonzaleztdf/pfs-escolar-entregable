@@ -12,18 +12,19 @@ export class Clase {
   nombre : string;
 
 
-  // controlador
+  // constructor
   constructor(nombre: string) {
     this.nombre = nombre;
   }
 
-  //metodos get&set
+  //metodos get
   public getId(){
     return this.id;
   }
   public getNombre(){
     return this.nombre;
   }
+  //metodos set
   public setNombre(nombre: string){
     this.nombre = nombre;
   }

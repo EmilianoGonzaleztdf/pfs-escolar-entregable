@@ -12,22 +12,22 @@ export class EstudianteController {
   }
 
   @Get()
-  findAll() {
+  findAll(): Promise<CreateEstudianteDto[]>{
     return this.estudianteService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.estudianteService.findOne(+id);
+  findOne(@Param('id') id: number) : Promise<CreateEstudianteDto> {
+    return this.estudianteService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() createEstudianteDto: CreateEstudianteDto) {
-    return this.estudianteService.update(+id, createEstudianteDto);
+  update(@Param('id') id: number, @Body() createEstudianteDto: CreateEstudianteDto) : Promise<String> {
+    return this.estudianteService.update(id, createEstudianteDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: string) : Promise <any> {
     return this.estudianteService.remove(+id);
   }
 }

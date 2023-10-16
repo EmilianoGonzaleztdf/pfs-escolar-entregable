@@ -78,7 +78,7 @@ export class EscuelaService {
           escuelaNombreViejo +
           ' por: ' +
           createEscuelaDto.nombre +
-          ' y el domicilio ' +
+          ' y el domicilio: ' +
           escuelaDomilicioViejo +
           ' por: ' +
           createEscuelaDto.domicilio

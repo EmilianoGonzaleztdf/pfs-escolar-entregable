@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { EscuelaService } from './escuela.service';
 import { CreateEscuelaDto } from './dto/create-escuela.dto';
-import { Escuela } from './entities/escuela.entity';
+
 
 @Controller('escuela')
 export class EscuelaController {
