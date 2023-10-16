@@ -6,4 +6,28 @@ import { CreateProfesorDto } from './dto/create-profesor.dto';
 export class ProfesorController {
   constructor(private readonly profesorService: ProfesorService) {}
 
+  @Post()
+  create(@Body() createProfesorDto: CreateProfesorDto) {
+    return this.profesorService.create(createProfesorDto);
+  }
+
+  @Get()
+  findAll() : Promise<CreateProfesorDto[]> {
+    return this.profesorService.findAll();
+  }
+
+  @Get(':id')
+  findOne(@Param('id') id: number) : Promise<CreateProfesorDto> {
+    return this.profesorService.findOne(id);
+  }
+
+  @Patch(':id')
+  update(@Param('id') id: number, @Body() createProfesorDto): Promise<String> {
+    return this.profesorService.update(id, createProfesorDto); 
+  }
+
+  @Delete(':id')
+  remove(@Param('id') id: number) : Promise<any> {
+    return this.profesorService.remove(id);
+  }
 }

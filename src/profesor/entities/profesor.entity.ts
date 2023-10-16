@@ -29,7 +29,7 @@ export class Profesor {
   public setNombre(nombre: string){
     this.nombre = nombre;
   }
-  public getapellido(){
+  public getApellido(){
     return this.apellido;
   }
   public setApellido(apellido: string){

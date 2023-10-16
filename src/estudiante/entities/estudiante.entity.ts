@@ -15,12 +15,11 @@ export class Estudiante {
   @IsNotEmpty()
   apellido : string;
 
-  @Column()
-  @IsNotEmpty()
-  fecha_nacimiento : Date;
+  @Column({ type: 'date' })
+  fecha_nacimiento: string;
 
 //constructor
-constructor(nombre : string, apellido : string, fecha_nacimiento : Date){
+constructor(nombre : string, apellido : string, fecha_nacimiento : string){
   this.nombre = nombre;
   this.apellido = apellido;
   this.fecha_nacimiento = fecha_nacimiento
@@ -45,7 +44,7 @@ public setNombre(nombre:string){
 public setApellido(apellido:string){
   this.apellido = apellido;
 }
-public setFechaNaciomiento(fecha_nacimiento:Date){
+public setFechaNaciomiento(fecha_nacimiento:string){
   this.fecha_nacimiento = fecha_nacimiento;
 }
 
