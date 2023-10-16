@@ -1,5 +1,6 @@
 import { IsNotEmpty } from "class-validator";
-import { Column, Entity, PrimaryGeneratedColumn,  } from "typeorm";
+import { Profesor } from "src/profesor/entities/profesor.entity";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn,  } from "typeorm";
 
 @Entity({name : "clase"})
 export class Clase {
@@ -11,7 +12,10 @@ export class Clase {
   @IsNotEmpty()
   nombre : string;
 
-
+  @ManyToOne(()=> Profesor , profesor => profesor.clase)
+  @JoinColumn({name : "fk_id_profesor"})
+  profesor : Profesor;
+  
   // constructor
   constructor(nombre: string) {
     this.nombre = nombre;

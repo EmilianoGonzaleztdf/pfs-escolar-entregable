@@ -1,5 +1,6 @@
 import { IsNotEmpty } from "class-validator";
-import { Column, Entity, PrimaryGeneratedColumn,  } from "typeorm";
+import { Clase } from "src/clase/entities/clase.entity";
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn,  } from "typeorm";
 
 //atributos
 @Entity({name : "profesor"})
@@ -14,6 +15,10 @@ export class Profesor {
   @Column()
   @IsNotEmpty()
   apellido : string;
+
+  @OneToMany(()=> Clase , clase => clase.profesor)
+  clase : Clase[];
+
   //constructor
   constructor(nombre: string,apellido: string ){
     this.nombre = nombre;
