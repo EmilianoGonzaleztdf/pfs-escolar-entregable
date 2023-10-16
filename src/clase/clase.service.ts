@@ -2,6 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Clase } from './entities/clase.entity';
 import { FindOneOptions, Repository } from 'typeorm';
+import { CreateClaseDto } from './dto/create-clase.dto';
 
 @Injectable()
 export class ClaseService {
@@ -64,23 +65,29 @@ export class ClaseService {
   }
   }
 
-  async actualizarClase(id: number, createClaseDto: Clase): Promise<String> {
+  async actualizarClase(id: number,createClaseDto: CreateClaseDto,): Promise<String> {
     try {
       const criterio: FindOneOptions = { where: { id: id } };
       let clase: Clase = await this.claseRepository.findOne(criterio);
-      let nombreViejo = clase.getNombre();
-      if (clase) {
-        clase.setNombre(createClaseDto.getNombre());
+      if (!clase)
+        throw new Error('no se pudo encontrar la clase a modificar');
+      else {
+        let claseNombreViejo = clase.getNombre();
+        clase.setNombre(createClaseDto.nombre);
         clase = await this.claseRepository.save(clase);
-        if (clase)
-          return `el nombre de la clase: ${nombreViejo} se cambio por:  ${clase.getNombre}`;
-        else throw new Error('no se pudo reemplazar el nombre de la clase');
-      } else throw new Error('no se pudo reemplazar');
+
+        return (
+          'se cambio el nombre: ' +
+          claseNombreViejo +
+          ' por: ' +
+          createClaseDto.nombre
+        );
+      }
     } catch (error) {
       throw new HttpException(
         {
           status: HttpStatus.CONFLICT,
-          error: ' no se pudo actualizar la clase ' + error,
+          error: ' no se puede actualizar la clase ' + error,
         },
         HttpStatus.NOT_FOUND,
       );
