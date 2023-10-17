@@ -1,5 +1,6 @@
 import { IsNotEmpty } from "class-validator";
-import { Column, Entity, PrimaryGeneratedColumn,  } from "typeorm";
+import { Clase } from "src/clase/entities/clase.entity";
+import { Column, Entity, JoinColumn, ManyToMany, PrimaryGeneratedColumn,  } from "typeorm";
 
 @Entity({name : "estudiante"})
 export class Estudiante {
@@ -17,6 +18,9 @@ export class Estudiante {
 
   @Column({ type: 'date' })
   fecha_nacimiento: string;
+
+  @ManyToMany(()=> Clase , clases => clases.estudiantes)
+  clases : Clase[];
 
 //constructor
 constructor(nombre : string, apellido : string, fecha_nacimiento : string){

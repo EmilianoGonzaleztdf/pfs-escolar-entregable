@@ -17,7 +17,7 @@ export class Profesor {
   apellido : string;
 
   @OneToMany(()=> Clase , clase => clase.profesor)
-  clase : Clase[];
+  clases : Clase[];
 
   //constructor
   constructor(nombre: string,apellido: string ){

@@ -11,17 +11,24 @@ import { AsistenciaModule } from './asistencia/asistencia.module';
 
 
 @Module({
-  imports: [TypeOrmModule.forRoot({
-    "type":"mysql",
-    "host": "localhost",
-    "port": 3306,
-    "username":"root",
-    "password":"emiliano1",
-    "database":"db_colegio",
-    "entities": [__dirname + "/**/**/**.entity{.ts,.js}"],
-    "synchronize": true //modo desarrollador.
-
-  }), CiudadModule, ClaseModule, ProfesorModule, EscuelaModule, EstudianteModule, AsistenciaModule,],
+  imports: [
+    TypeOrmModule.forRoot({
+      type: 'mysql',
+      host: 'localhost',
+      port: 3306,
+      username: 'root',
+      password: 'emiliano1',
+      database: 'db_colegio',
+      entities: [__dirname + '/**/**/**.entity{.ts,.js}'],
+      synchronize: true, //modo desarrollador.
+    }),
+    CiudadModule,
+    ClaseModule,
+    ProfesorModule,
+    EscuelaModule,
+    EstudianteModule,
+    AsistenciaModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

@@ -22,7 +22,7 @@ export class Escuela {
   ciudad : Ciudad;
 
   @OneToMany(()=> Clase , clase=> clase.escuela)
-  clase : Clase[];
+  clases : Clase[];
 
   // controlador
   constructor(nombre: string, domicilio: string) {
