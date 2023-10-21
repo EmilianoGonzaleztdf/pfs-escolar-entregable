@@ -1,5 +1,6 @@
 import { Escuela } from "src/escuela/entities/escuela.entity";
 import { Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { CiudadProfesor } from "./ciudad_profesor.entity";
 
 @Entity({name : "ciudad"})
 export class Ciudad {
@@ -12,6 +13,9 @@ export class Ciudad {
 
   @OneToMany(()=> Escuela, escuela => escuela.ciudad) // le pasamos un metodo como parametro de a que entidad hace referencia - una ciudad tiene muchas escuelas
 
+  @OneToMany(()=> CiudadProfesor, domiclios => domiclios.ciudad)
+  domicilios : CiudadProfesor[];
+  
   public escuela : Escuela[];
 
   constructor(nombre: string){
