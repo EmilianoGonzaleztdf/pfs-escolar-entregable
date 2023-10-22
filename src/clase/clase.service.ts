@@ -34,7 +34,7 @@ export class ClaseService {
 
   async buscarTodos(): Promise<Clase[]> {
     try{
-    return await this.claseRepository.find();
+    return await this.claseRepository.find({relations : ['estudiantes']});
     }  catch (error) {
       throw new HttpException(
         {
@@ -51,7 +51,7 @@ export class ClaseService {
     //let clase : Clase = await this.claseRepository.findOne(criterio);
     // esto es lo mismo que la linea de abajo
     try {
-    let clase = await this.claseRepository.findOne({ where: { id: id } });
+    let clase = await this.claseRepository.findOne({ where: { id: id }, relations: ['estudiantes'] });
     if (clase) return clase;
     else return null;
   } catch (error) {
