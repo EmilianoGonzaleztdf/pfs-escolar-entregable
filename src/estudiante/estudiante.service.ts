@@ -12,15 +12,17 @@ export class EstudianteService {
     private estudianteRepository: Repository<Estudiante>,
     @InjectRepository(Clase)
     private claseRepository: Repository<Clase>,
-  ){}
+  ) {}
 
-  async create(createEstudianteDto: CreateEstudianteDto) : Promise<boolean> {
+  async create(createEstudianteDto: CreateEstudianteDto) {
     try {
       let estudiante: Estudiante = await this.estudianteRepository.save(
-        new Estudiante(createEstudianteDto.nombre, createEstudianteDto.apellido, createEstudianteDto.fecha_nacimiento),
+        new Estudiante(
+          createEstudianteDto.nombre,
+          createEstudianteDto.apellido,
+          createEstudianteDto.fecha_nacimiento,
+        ),
       );
-      if (estudiante) return true;
-      else return false;
     } catch (error) {
       throw new HttpException(
         {
@@ -31,16 +33,21 @@ export class EstudianteService {
       );
     }
   }
-  async createConRelacion(createEstudianteDto : CreateEstudianteDto) : Promise <boolean>{
+  async createConRelacion(
+    createEstudianteDto: CreateEstudianteDto,
+  ): Promise<boolean> {
     try {
-      const clase : Clase[] = await this.claseRepository.find();
-/*      let estudiante: Estudiante = await this.estudianteRepository.save(
+      const clase: Clase[] = await this.claseRepository.find();
+      /*      let estudiante: Estudiante = await this.estudianteRepository.save(
         new Estudiante(createEstudianteDto.nombre, createEstudianteDto.apellido, createEstudianteDto.fecha_nacimiento),
       );
       */
-      let estudiante : Estudiante = new Estudiante(createEstudianteDto.nombre, createEstudianteDto.apellido, createEstudianteDto.fecha_nacimiento)
-      if(clase)
-        estudiante.clases = clase;
+      let estudiante: Estudiante = new Estudiante(
+        createEstudianteDto.nombre,
+        createEstudianteDto.apellido,
+        createEstudianteDto.fecha_nacimiento,
+      );
+      if (clase) estudiante.clases = clase;
       await this.estudianteRepository.save(estudiante);
       if (estudiante) return true;
       else return false;
@@ -71,7 +78,9 @@ export class EstudianteService {
 
   async findOne(id: number): Promise<Estudiante> {
     try {
-      let estudiante = await this.estudianteRepository.findOne({ where: { id: id }/*, relations : ['clases'] */});
+      let estudiante = await this.estudianteRepository.findOne({
+        where: { id: id } /*, relations : ['clases'] */,
+      });
       if (!estudiante) {
         throw new Error('no se encuentra el estudiante ');
       } else return estudiante;
@@ -86,19 +95,22 @@ export class EstudianteService {
     }
   }
 
-  async update(id: number,createEstudianteDto: CreateEstudianteDto,): Promise<String> {
+  async update(
+    id: number,
+    createEstudianteDto: CreateEstudianteDto,
+  ): Promise<String> {
     try {
       const criterio: FindOneOptions = { where: { id: id } };
-      let estudiante: Estudiante = await this.estudianteRepository.findOne(criterio);
-      if (!estudiante)
-        throw new Error('no se pudo encontrar el estudiante');
+      let estudiante: Estudiante =
+        await this.estudianteRepository.findOne(criterio);
+      if (!estudiante) throw new Error('no se pudo encontrar el estudiante');
       else {
         let estudianteNombreViejo = estudiante.getNombre();
         let estudianteApellidoViejo = estudiante.getApellido();
         let estudianteFechaNac_vieja = estudiante.getFechaNaciomiento();
         estudiante.setNombre(createEstudianteDto.nombre);
         estudiante.setApellido(createEstudianteDto.apellido);
-        estudiante.setFechaNaciomiento(createEstudianteDto.fecha_nacimiento)
+        estudiante.setFechaNaciomiento(createEstudianteDto.fecha_nacimiento);
         estudiante = await this.estudianteRepository.save(estudiante);
 
         return (
@@ -109,9 +121,9 @@ export class EstudianteService {
           ' , el domicilio: ' +
           estudianteApellidoViejo +
           ' por: ' +
-          createEstudianteDto.apellido + 
-          ' la fecha de nacimiento ' + 
-          estudianteFechaNac_vieja + 
+          createEstudianteDto.apellido +
+          ' la fecha de nacimiento ' +
+          estudianteFechaNac_vieja +
           ' por: ' +
           createEstudianteDto.fecha_nacimiento
         );
@@ -130,7 +142,8 @@ export class EstudianteService {
   async remove(id: number): Promise<any> {
     try {
       let criterio: FindOneOptions = { where: { id: id } };
-      let estudiante: Estudiante = await this.estudianteRepository.findOne(criterio);
+      let estudiante: Estudiante =
+        await this.estudianteRepository.findOne(criterio);
       if (!estudiante) throw new Error('no se pudo eliminar al estudiante');
       else await this.estudianteRepository.remove(estudiante);
       return {

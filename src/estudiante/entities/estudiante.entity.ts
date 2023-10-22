@@ -26,6 +26,7 @@ export class Estudiante {
   @OneToMany(()=> CiudadEstudiante, domiclios => domiclios.estudiante)
   domicilios : Estudiante[];
 
+
 //constructor
 constructor(nombre : string, apellido : string, fecha_nacimiento : string){
   this.nombre = nombre;
