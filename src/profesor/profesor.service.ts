@@ -3,12 +3,18 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { FindOneOptions, Repository } from 'typeorm';
 import { Profesor } from './entities/profesor.entity';
 import { CreateProfesorDto } from './dto/create-profesor.dto';
+import { Ciudad } from 'src/ciudad/entities/ciudad.entity';
+import { CiudadProfesor } from 'src/ciudad/entities/ciudad_profesor.entity';
 
 @Injectable()
 export class ProfesorService {
   constructor(
     @InjectRepository(Profesor)
-    private profesorRepository: Repository<Profesor>,
+    private readonly profesorRepository: Repository<Profesor>,
+    @InjectRepository(Ciudad)
+    private readonly ciudadRepository: Repository<Ciudad>,
+    @InjectRepository(CiudadProfesor)
+    private ciudadProfesorRepository: Repository<CiudadProfesor>,
   ) {}
 
   async create(createprofesorDto: CreateProfesorDto): Promise<boolean> {
@@ -114,5 +120,29 @@ export class ProfesorService {
         HttpStatus.NOT_FOUND,
       );
     }
+  }
+
+  async createDomicilio(body){
+    try{
+    const {ciudadId , profesorId , domicilio} = body;
+    const profesor = await this.profesorRepository.findOne({ where: { id : profesorId}});
+      if(!profesor)
+        throw new Error('no existe el profesor');
+    const ciudad = await this.ciudadRepository.findOne({ where: { id : ciudadId }});
+      if(!ciudad)
+        throw new Error('no existe la ciudad');
+    const nuevo_domicilio = await this.ciudadProfesorRepository.findOne({where : { ciudadId : ciudadId , profesorId : profesorId}});
+      if(nuevo_domicilio)
+        throw new Error('el profesor ya tiene domicilio');
+      return await this.ciudadProfesorRepository.save( new CiudadProfesor (ciudadId, profesorId, domicilio))
+  } catch (error) {
+    throw new HttpException(
+      {
+        status: HttpStatus.NOT_FOUND,
+        error: ' error en profesor ' + error,
+      },
+      HttpStatus.NOT_FOUND,
+    );
+  }
   }
 }

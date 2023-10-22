@@ -1,6 +1,5 @@
 import { IsNotEmpty } from "class-validator";
 import { CiudadEstudiante } from "src/ciudad/entities/ciudad_estudiante.entity";
-import { CiudadProfesor } from "src/ciudad/entities/ciudad_profesor.entity";
 import { Clase } from "src/clase/entities/clase.entity";
 import { Column, Entity, JoinColumn, ManyToMany, OneToMany, PrimaryGeneratedColumn,  } from "typeorm";
 

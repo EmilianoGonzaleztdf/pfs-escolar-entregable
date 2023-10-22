@@ -30,4 +30,8 @@ export class ProfesorController {
   remove(@Param('id') id: number) : Promise<any> {
     return this.profesorService.remove(id);
   }
+  @Post('agregarDomicilio')
+  async createDomicilio(@Body() body: any): Promise<any> {
+    return this.profesorService.createDomicilio(body)
+  }
 }

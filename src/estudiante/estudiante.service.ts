@@ -3,12 +3,15 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { FindOneOptions, Repository } from 'typeorm';
 import { CreateEstudianteDto } from './dto/create-estudiante.dto';
 import { Estudiante } from './entities/estudiante.entity';
+import { Clase } from 'src/clase/entities/clase.entity';
 
 @Injectable()
 export class EstudianteService {
   constructor(
     @InjectRepository(Estudiante)
     private estudianteRepository: Repository<Estudiante>,
+    @InjectRepository(Clase)
+    private claseRepository: Repository<Clase>,
   ){}
 
   async create(createEstudianteDto: CreateEstudianteDto) : Promise<boolean> {
@@ -28,8 +31,31 @@ export class EstudianteService {
       );
     }
   }
+  async createConRelacion(createEstudianteDto : CreateEstudianteDto) : Promise <boolean>{
+    try {
+      const clase : Clase[] = await this.claseRepository.find();
+/*      let estudiante: Estudiante = await this.estudianteRepository.save(
+        new Estudiante(createEstudianteDto.nombre, createEstudianteDto.apellido, createEstudianteDto.fecha_nacimiento),
+      );
+      */
+      let estudiante : Estudiante = new Estudiante(createEstudianteDto.nombre, createEstudianteDto.apellido, createEstudianteDto.fecha_nacimiento)
+      if(clase)
+        estudiante.clases = clase;
+      await this.estudianteRepository.save(estudiante);
+      if (estudiante) return true;
+      else return false;
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.CONFLICT,
+          error: ' no se puede crear el estudiante ' + error,
+        },
+        HttpStatus.NOT_FOUND,
+      );
+    }
+  }
 
-  async findAll(): Promise<CreateEstudianteDto[]> {
+  async findAll(): Promise<Estudiante[]> {
     try {
       return await this.estudianteRepository.find();
     } catch (error) {
@@ -43,9 +69,9 @@ export class EstudianteService {
     }
   }
 
-  async findOne(id: number): Promise<CreateEstudianteDto> {
+  async findOne(id: number): Promise<Estudiante> {
     try {
-      let estudiante = await this.estudianteRepository.findOne({ where: { id: id } });
+      let estudiante = await this.estudianteRepository.findOne({ where: { id: id }/*, relations : ['clases'] */});
       if (!estudiante) {
         throw new Error('no se encuentra el estudiante ');
       } else return estudiante;
