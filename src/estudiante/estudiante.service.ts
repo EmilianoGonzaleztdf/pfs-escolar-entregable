@@ -4,25 +4,27 @@ import { FindOneOptions, Repository } from 'typeorm';
 import { CreateEstudianteDto } from './dto/create-estudiante.dto';
 import { Estudiante } from './entities/estudiante.entity';
 import { Clase } from 'src/clase/entities/clase.entity';
+import { ClaseEstudiante } from 'src/clase/entities/clase_estudiante.entity';
 
 @Injectable()
 export class EstudianteService {
   constructor(
     @InjectRepository(Estudiante)
-    private estudianteRepository: Repository<Estudiante>,
+    private readonly estudianteRepository: Repository<Estudiante>,
     @InjectRepository(Clase)
-    private claseRepository: Repository<Clase>,
+    private readonly claseRepository: Repository<Clase>,
+    @InjectRepository(ClaseEstudiante)
+    private readonly claseEstudianteRepository: Repository<ClaseEstudiante>,
   ) {}
 
   async create(createEstudianteDto: CreateEstudianteDto) {
     try {
-      let estudiante: Estudiante = await this.estudianteRepository.save(
-        new Estudiante(
-          createEstudianteDto.nombre,
-          createEstudianteDto.apellido,
-          createEstudianteDto.fecha_nacimiento,
-        ),
-      );
+      const estudiante: Estudiante = await this.estudianteRepository.save(
+        new Estudiante(createEstudianteDto.nombre,createEstudianteDto.apellido,createEstudianteDto.fecha_nacimiento));
+      if (estudiante)
+        return `se creo estudiante ${estudiante.nombre}`
+      else 
+        throw new Error('no se creo el estudiante ');
     } catch (error) {
       throw new HttpException(
         {
@@ -33,25 +35,20 @@ export class EstudianteService {
       );
     }
   }
-  async createConRelacion(
-    createEstudianteDto: CreateEstudianteDto,
-  ): Promise<boolean> {
-    try {
-      const clase: Clase[] = await this.claseRepository.find();
-      /*      let estudiante: Estudiante = await this.estudianteRepository.save(
-        new Estudiante(createEstudianteDto.nombre, createEstudianteDto.apellido, createEstudianteDto.fecha_nacimiento),
-      );
-      */
-      let estudiante: Estudiante = new Estudiante(
-        createEstudianteDto.nombre,
-        createEstudianteDto.apellido,
-        createEstudianteDto.fecha_nacimiento,
-      );
-      if (clase) estudiante.clases = clase;
-      await this.estudianteRepository.save(estudiante);
-      if (estudiante) return true;
-      else return false;
-    } catch (error) {
+  async addClase(body):Promise<any>{
+  try {
+    const {claseId,estudianteId} = body;
+    const estudiante = await this.estudianteRepository.findOne({where:{id:estudianteId}})
+    if(!estudiante)
+      return `error - no se encontre el estudiante con id ${estudianteId}`;
+    const clase = await this.claseRepository.findOne({where:{id:claseId}})
+    if(!clase)
+      return 'error - no se encontro esa clase';
+    const clase_estudiante = await this.claseEstudianteRepository.findOne({where:{claseId:claseId,estudianteId:estudianteId}})
+    if(clase_estudiante)
+      return 'error - el estudiante ya tiene asignada esa clase';
+    return await this.claseEstudianteRepository.save(new ClaseEstudiante(estudianteId,claseId));
+  } catch (error) {
       throw new HttpException(
         {
           status: HttpStatus.CONFLICT,

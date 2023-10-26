@@ -15,14 +15,14 @@ import { Estudiante } from './entities/estudiante.entity';
 export class EstudianteController {
   constructor(private readonly estudianteService: EstudianteService) {}
 
-  /*  @Post()
+  @Post()
   create(@Body() createEstudianteDto: CreateEstudianteDto) {
     return this.estudianteService.create(createEstudianteDto);
   }
-*/
-  @Post(":id")
-  async create(@Body() createEstudianteDto: CreateEstudianteDto): Promise<boolean> {
-    return await this.estudianteService.createConRelacion(createEstudianteDto);
+
+  @Post('agregar-clase')
+  async addClase(@Body() body:any):Promise<any>{
+    return await this.estudianteService.addClase(body);
   }
 
   @Get()
@@ -36,9 +36,7 @@ export class EstudianteController {
   }
 
   @Patch(':id')
-  update(
-    @Param('id') id: number,
-    @Body() createEstudianteDto: CreateEstudianteDto,): Promise<String> {
+  update(@Param('id') id: number,@Body() createEstudianteDto: CreateEstudianteDto,): Promise<String> {
     return this.estudianteService.update(id, createEstudianteDto);
   }
 
