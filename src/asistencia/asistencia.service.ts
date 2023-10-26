@@ -19,7 +19,7 @@ export class AsistenciaService {
     const asistencia_estudiante = await this.claseEstudianteRepository.findOne({where:{estudianteId:estudianteId,claseId:claseId}});
     if(!asistencia_estudiante)
       return 'no existe estudiante/clase'
-    return await this.asistenciaRepository.save(new Asistencia(claseId,estudianteId, new Date()));
+    return await this.asistenciaRepository.save(new Asistencia(claseId,estudianteId));
   }
 
   findAll() {

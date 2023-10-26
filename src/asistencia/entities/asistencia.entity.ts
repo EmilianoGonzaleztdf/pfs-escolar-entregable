@@ -1,21 +1,20 @@
 import { ClaseEstudiante } from "src/clase/entities/clase_estudiante.entity";
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn, } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryColumn, } from "typeorm";
 
 @Entity('asistencia')
 export class Asistencia {
-  @PrimaryColumn()
+  @PrimaryColumn({name : 'claseEstudianteEstudianteId'})
   claseId: number;
 
-  @PrimaryColumn()
+  @PrimaryColumn({name : 'claseEstudianteClaseId'})
   estudianteId : number;
 
-  @Column({ type: 'date' })
+  @CreateDateColumn()
   fecha: Date;
 
-  constructor(claseId : number , estudianteId : number, fecha : Date ) {
+  constructor(claseId : number , estudianteId : number ) {
     this.claseId = claseId;
     this.estudianteId = estudianteId;
-    this.fecha = fecha;
   }
 
   @ManyToOne(()=>ClaseEstudiante,claseEstudiante=>claseEstudiante.asistencia)

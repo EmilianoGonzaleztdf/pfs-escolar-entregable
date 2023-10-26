@@ -6,23 +6,26 @@ import { Asistencia } from "src/asistencia/entities/asistencia.entity";
 @Entity({name : "clase_estudiante"})
 export class ClaseEstudiante{
 
-  constructor(estudianteId : number, claseId : number){
-    this.estudianteId = estudianteId;
-    this.claseId = claseId;
-  }
-
   @PrimaryColumn()
   estudianteId: number;
 
   @PrimaryColumn()
   claseId : number;
 
+  constructor(estudianteId : number, claseId : number){
+    this.estudianteId = estudianteId;
+    this.claseId = claseId;
+  }
 
   @ManyToOne(()=> Estudiante, estudiante =>estudiante.claseEstudiante)
   @JoinColumn()
   estudiante : Estudiante;
 
-  @ManyToOne(()=> Asistencia , asistencia => asistencia.claseEstudiante)
+  @ManyToOne(()=> Clase, clase =>clase.claseEstudiante)
+  @JoinColumn() 
+  clase : Clase;
+
+  @OneToMany(()=> Asistencia , asistencia => asistencia.claseEstudiante)
   asistencia : Asistencia[];
 
 }
