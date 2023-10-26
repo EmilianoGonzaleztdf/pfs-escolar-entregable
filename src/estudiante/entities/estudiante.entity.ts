@@ -1,4 +1,5 @@
 import { IsNotEmpty } from "class-validator";
+import { Asistencia } from "src/asistencia/entities/asistencia.entity";
 import { CiudadEstudiante } from "src/ciudad/entities/ciudad_estudiante.entity";
 import { Clase } from "src/clase/entities/clase.entity";
 import { ClaseEstudiante } from "src/clase/entities/clase_estudiante.entity";
@@ -30,6 +31,8 @@ export class Estudiante {
   @OneToMany(()=> CiudadEstudiante, domiclios => domiclios.estudiante)
   domicilios : Estudiante[];
 
+  @OneToMany(()=>Asistencia,asistencia=>asistencia.claseEstudiante)
+  asistencias:Asistencia[];
 
 //constructor
 constructor(nombre : string, apellido : string, fecha_nacimiento : string){
